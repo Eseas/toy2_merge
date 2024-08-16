@@ -1,5 +1,6 @@
 package com.fastcampus.toy2.dao.Order;
 
+
 import com.fastcampus.toy2.domain.Order.CartDto;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +28,12 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
-    public int update(String crt_id) throws Exception {
+    public int update(Long crt_id) throws Exception {
         return session.update(namespace + "update", crt_id);
     }
 
     @Override
-    public CartDto selectCartId(String crt_id) throws Exception {
+    public CartDto selectCartId(Long crt_id) throws Exception {
         return session.selectOne(namespace + "selectCartId", crt_id);
     }
 
@@ -42,8 +43,13 @@ public class CartDaoImpl implements CartDao {
     }
 
     @Override
-    public CartDto selectUserCartActive(String mbr_id) throws Exception{
-        return session.selectOne(namespace + "userCartActive", mbr_id);
+    public CartDto selectUserCart(String mbr_id) throws Exception{
+        return session.selectOne(namespace + "selectUserCart", mbr_id);
+    }
+
+    @Override
+    public int deleteUserCart(String mbr_id) throws Exception {
+        return session.delete(namespace + "deleteUserCart", mbr_id);
     }
 
 }

@@ -4,5 +4,72 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fastcampus.toy2.dao.Product.ProductKindMapper">
+    <!-- count -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM product_kind
+    </select>
+    <!-- select -->
+    <sql id="select">
+        SELECT style_num, product_id, color_code, sale_state, sale_count, created_dt, created_id, updated_dt, updated_id
+        FROM product_kind
+    </sql>
+    <select id="selectByStyleNum" parameterType="String" resultType="ProductKindDto">
+        <include refid="select" />
+        WHERE style_num = #{style_num}
+    </select>
+    <select id="selectAll" resultType="ProductKindDto">
+        <include refid="select" />
+    </select>
+    <select id="selectByProductId" parameterType="String" resultType="ProductKindDto">
+        <include refid="select" />
+        WHERE product_id = #{product_id}
+    </select>
+    <select id="selectByColorCode" parameterType="String" resultType="ProductKindDto">
+        <include refid="select" />
+        WHERE color_code = #{color_code}
+    </select>
+    <!-- insert -->
+    <insert id="insert" parameterType="ProductKindDto">
+        INSERT INTO product_kind
+        (style_num, product_id, color_code, sale_state, created_id, updated_id)
+        VALUES
+        (#{style_num}, #{product_id}, #{color_code}, #{sale_state}, #{created_id}, #{updated_id})
+    </insert>
+    <!-- update -->
+    <update id="update" parameterType="ProductKindDto">
+        UPDATE product_kind
+        SET
+            product_id = #{product_id}
+            color_code = #{color_code}
+            sale_state = #{sale_state}
+            updated_id = #{updated_id}
+        WHERE
+            style_num = #{style_num}
+    </update>
+    <update id="updateSaleCount" parameterType="map">
+        UPDATE product_kind
+        SET
+            <choose>
+                <when test="reason=='S'">
+                    sale_count = sale_count + 1
+                </when>
+                <otherwise>
+                    sale_count = sale_count - 1
+                </otherwise>
+            </choose>
+        WHERE style_num = #{style_num}
+    </update>
+    <!-- delete -->
+    <sql id="delete">
+        DELETE FROM product_kind
+    </sql>
+    <delete id="DeleteById" parameterType="String">
+        <include refid="delete" />
+        WHERE style_num = #{style_num}
+    </delete>
+    <delete id="DeleteAll">
+        <include refid="delete" />
+    </delete>
 
 </mapper>

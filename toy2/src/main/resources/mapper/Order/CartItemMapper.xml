@@ -3,12 +3,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fastcampus.toy2.dao.CartItemMapper">
-    <sql id="selectFromCart">
-        SELECT cart_id, cart_seq, style_num, p_size,
-               count, ord_st, state
+    <sql id="selectFromCartItem">
+        SELECT crt_id, crt_seq, style_num, p_size,
+               count, crt_item_date, crt_item_update,
+               created_dt, created_id, updated_dt, updated_id
         FROM cart_item
     </sql>
-
 
     <!-- 장바구니에 담긴 전체 상품 체크  -->
     <select id="count" resultType="int">
@@ -17,29 +17,97 @@
     </select>
 
 <!--  CRUD  -->
-<!--    1. 고객이 상품을 장바구니에 담는 경우     -->
-    <insert id="insert" parameterType="Map">
-        INSERT INTO cart_item(cart_id, cart_seq, style_num, p_size, count, create_id, update_id)
-        VALUES #{cart_id}, #{cart_seq}, #{style_num}, #{p_size}, #{count}, #{mbr_id}, #{mbr_id}
+    <!--    고객이 상품을 장바구니에 담는 경우     -->
+    <insert id="insert" parameterType="map">
+        INSERT INTO cart_item(crt_id, crt_seq, style_num, p_size, count, created_id, updated_id)
+        VALUES (#{cart_item.crt_id}, #{cart_item.crt_seq}, #{cart_item.style_num}, #{cart_item.p_size}, #{cart_item.count},
+                #{member.mbr_id}, #{member.mbr_id})
     </insert>
 
-<!--  2. 고객이 상품 주문을 완료하는 경우. 즉, 주문테이블, 주문_상품 테이블에 insert가 성공하는 경우(1)  -->
-<!--    2.1. update로 주문상태 변환
-        2.2. 주문상태가 N으로 바뀐 row의 장바구니번호, 장바구니상품일련번호를 List로 반환
-        2.3. 해당하는 장바구니번호, 장바구니상품일련번호의 장바구니 상품 상태의 주문 완료상태를 Y 로 변경
-        2.4. 동일한 장바구니 번호에서 주문 완료 상태가 N인게 있는지 count로 확인
-        2.5. 개수가 1이 넘어가면 해당하는 장바구니의 장바구니상품, 일련번호를 제외하고 List로 가져옴
-        2.6. 장바구니번호를 새롭게 생성
-        2.7. 새로 생성된 장바구니 번호에 List로 가지고 있는 상품 다시 담기
-  -->
-    <update id="update" parameterType="Map">
+    <!--  고객이 장바구니에 담은 상품의 옵션을 변경하는 경우  -->
+    <update id="updateOption" parameterType="CartItemDto">
         UPDATE cart_item
-        SET ord_st = 'N'
-        WHERE crt_id = #{cart_id},
-               crt_seq = #{crt_seq}
+        SET
+            <if test="p_size != null">
+                p_size = #{p_size},
+            </if>
+            <if test="count != null">
+                count = #{count},
+            </if>
+                crt_item_update = now()
+        WHERE crt_id = #{crt_id}
+        AND crt_seq = #{crt_seq}
     </update>
 
+    <!--    장바구니에 존재하는 가장 큰 crt_seq 값을 가져오기-->
+    <select id="maxCartCrtSeq" parameterType="Long" resultType="int">
+        SELECT MAX(crt_seq)
+        FROM cart_item
+        WHERE crt_id = #{crt_id}
+    </select>
 
+    <!--  고객이 상품 주문을 완료하는 경우. 즉, 주문테이블, 주문_상품 테이블에 insert가 성공하는 경우(1)  -->
+    <!--    1. 주문이 완료된되어 주문_상품에 insert된 row 의 장바구니번호, 장바구니상품일련번호를 List로 반환
+            2. 장바구니_상품 테이블에서 List로 반환한 size가 장바구니 상품 count개수와 일치하는지 확인
+               2.1. 일치하는 경우 장바구니 번호가 일치하는 장바구니_상품 테이블 컬럼 삭제
+               2.2. 일치하지 않는 경우 주문완료한 장바구니번호, 장바구니일련번호에 해당하는 컬럼만 삭제 진행
+                    - 장바구니를 insert진행하여 장바구니 번호를 받아와서
+                    - 삭제가 진행된 장바구니 번호를 새로운 장바구니로 update -> update하면 이력에도 담아줘야 됨
+      -->
+    <select id="countCartItem" parameterType="Long" resultType="int">
+        SELECT count(*)
+        FROM cart_item
+        WHERE crt_id = #{crt_id}
+    </select>
 
-<!--  비회원 -> 주문번호가 ID가 되니까 비회원ID컬럼이 따로 필요없는 것같음.  -->
+    <delete id="deleteCartItem" parameterType="Map">
+        DELETE FROM cart_item
+        WHERE crt_id = #{crt_id}
+        AND crt_seq = #{crt_seq}
+    </delete>
+
+    <!--  장바구니 주문 완료 후 남은 상품들의 장바구니 번호를 번경   -->
+    <update id="updateNewCartItem" parameterType="Long">
+        UPDATE cart_item
+        SET crt_id = #{crt_id}
+    </update>
+
+    <!-- 전체 삭제  -->
+    <delete id="deleteAll">
+        DELETE FROM cart_item
+    </delete>
+
+    <!--  테스트를 위한 mapper : 장바구니_ID, 장바구니_일련번호를 select   -->
+    <select id="selectCartItem" parameterType="CartItemDto" resultType="CartItemDto">
+        <include refid="selectFromCartItem"></include>
+        WHERE crt_id = #{crt_id}
+        AND crt_seq = #{crt_seq}
+    </select>
+
+    <!--  테스트를 위한 mppaer : 장바구니 일련번호를 구하기 위한 select   -->
+    <select id="selectCrtSeqListByCrtId" resultType="int">
+        SELECT crt_seq
+        FROM cart_item
+        WHERE crt_id = #{crt_id}
+    </select>
+
 </mapper>
+
+        <!--  비회원 -> 주문번호가 ID가 되니까 비회원ID컬럼이 따로 필요없는 것같음.  -->
+
+
+
+        <!--  2. 고객이 상품 주문을 완료하는 경우. 즉, 주문테이블, 주문_상품 테이블에 insert가 성공하는 경우(1)  -->
+        <!--    2.1. 주문이 완료된되어 주문_상품에 insert된 row 의 장바구니번호, 장바구니상품일련번호를 List로 반환
+                2.2. 장바구니_상품 테이블에서 List로 반환한 정보에 해당하는 장바구니번호, 장바구니상품일련번호의 장바구니 상품 상태의 주문 완료상태를 Y 로 변경
+                2.3. 동일한 장바구니 번호에서 주문 완료 상태가 N인게 있는지 count로 확인
+                2.4. 개수가 1이 넘어가면 해당하는 장바구니의 장바구니상품, 일련번호를 제외하고 List로 가져옴
+                2.5. 장바구니번호를 새롭게 생성
+                2.6. 새로 생성된 장바구니 번호에 List로 가지고 있는 상품 다시 담기 -> 기존 insert 재이용 가능
+          -->
+<!--    <update id="update" parameterType="Map">-->
+<!--    UPDATE cart_item-->
+<!--    SET ord_st = 'Y'-->
+<!--    WHERE crt_id = #{crt_id},-->
+<!--                AND crt_seq = #{crt_seq}-->
+<!--    </update>-->

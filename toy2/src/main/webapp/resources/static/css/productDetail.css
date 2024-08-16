@@ -1,0 +1,310 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Tint&display=swap');
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+.wrapper {
+    width: 300px;
+    height: 60px;
+    background-color: #FFFFFF;
+    margin: 0 auto; /* 화면 중앙에 가로로 배치 */
+    position: relative;
+    top: 10%; /* 화면 상단에서 아래로 10%만큼 배치 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF; /* 배경색 설정 */
+    font-family: Bungee Tint, Arial, serif;
+    font-size: 40px; /* 폰트 크기 */
+    cursor: pointer; /* 클릭 커서 표시 */
+}
+
+.top-right-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.top-right-buttons a {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #f5f5f5;
+    color: black;
+    text-decoration: none;
+    border-radius: 5px;
+    border: 2px solid black; /* 테두리를 추가 */
+}
+
+.top-right-buttons a:hover {
+    background-color: white;
+}
+
+.product-container {
+    display: flex;
+    margin: 50px;
+}
+
+.product-image img {
+    max-width: 100%;
+    height: auto;
+}
+
+.product-details {
+    margin-left: 50px;
+}
+
+.product-details h1 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.product-details .price {
+    color: #333;
+    font-size: 1.5em;
+}
+
+.product-details .discount {
+    color: red;
+    font-size: 1.2em;
+    text-decoration: line-through;
+}
+
+.product-details .final-price {
+    color: green;
+    font-size: 1.8em;
+}
+
+.product-details .color-options,
+.product-details .size-options {
+    margin: 20px 0;
+}
+
+.cartbutton {
+    background-color: black;
+    color: white;
+    padding: 15px 32px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 1000;
+}
+.buybutton {
+    background-color: #006D60;
+    color: white;
+    padding: 15px 32px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 1000;
+}
+
+.size-options .size-label {
+    margin-right: 10px;
+}
+
+.size-options input[disabled] + label {
+    color: gray;
+}
+
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 좌우 공간을 최대한 활용하여 정렬 */
+    margin: 20px 0;
+}
+
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 버튼과 수량 표시 사이의 간격 조정 */
+}
+
+.quantity-btn {
+    width: 30px;
+    height: 30px;
+    background-color: black;
+    color: white;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex; /* Flexbox를 사용하여 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    padding: 0; /* 기본 패딩 제거 */
+}
+
+.quantity-btn:hover {
+    background-color: #bbb;
+}
+
+#quantity {
+    width: 150px; /* 수량 입력 필드의 너비 조정 */
+    height: 30px;
+    text-align: center;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    margin: 0; /* 여백 제거 */
+}
+
+.product-detail {
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.review-list {
+    margin-top: 50px;
+}
+.review-item {
+    padding: 20px;
+    border-bottom: 1px solid #ccc;
+}
+.review-item:last-child {
+    border-bottom: none;
+}
+.review-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.review-content {
+    margin-bottom: 10px;
+}
+.review-rating {
+    display: flex;
+    color: #f39c12;
+}
+.star {
+    position: relative;
+    font-size: 24px;
+    color: #ccc;
+}
+.star.full::before {
+    content: '★';
+    color: #f39c12;
+    position: absolute;
+    left: 0;
+}
+.star.half::before {
+    content: '★';
+    color: #f39c12;
+    position: absolute;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+}
+.review-date {
+    font-size: 14px;
+    color: #777;
+}
+
+.review-button {
+    padding: 10px 20px;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block; /* inline-block으로 변경하여 버튼이 컨테이너 내에서 자연스럽게 배치되도록 함 */
+    margin-top: 20px; /* 리뷰 목록과 버튼 사이에 여백을 추가 */
+}
+
+.review-button:hover {
+    background-color: #f4f4f4;
+}
+
+#totalPrice {
+    display: inline-block;
+    min-width: 100px; /* 고정된 최소 너비 설정 */
+    text-align: right; /* 텍스트를 오른쪽으로 정렬 */
+}
+
+/* Common Styles for both size and color options */
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Size Radio Button Styles */
+.size-radio-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.size-radio-item:hover {
+    border-color: #000;
+}
+
+input[type="radio"].size-radio {
+    display: none;
+}
+
+input[type="radio"].size-radio:checked + .size-radio-item {
+    border-color: #000;
+    background-color: #f0f0f0;
+    font-weight: bold;
+}
+
+.size-radio-item.disabled {
+    color: gray;
+    border-color: gray;
+    cursor: default;
+}
+
+/* Color Radio Button Styles */
+.color-option {
+    position: relative;
+    width: 60px;
+    height: 60px;
+}
+
+input[type="radio"].color-radio {
+    display: none;
+}
+
+.color-label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background-color: white;
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+/* Change border color when a color option is selected */
+input[type="radio"].color-radio:checked + .color-label {
+    border-color: #000;
+    font-weight: bold;
+}

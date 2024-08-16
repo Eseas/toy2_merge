@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
@@ -19,13 +20,13 @@ public class ProductKindDaoImpl implements ProductKindDao {
     }
 
     @Override
-    public ProductKindDto selectById(ProductKindDto productKindDto) throws Exception {
-        return sqlSession.selectOne(namespace + "selectById", productKindDto);
+    public ProductKindDto selectById(String style_num) throws Exception {
+        return sqlSession.selectOne(namespace + "selectById", style_num);
     }
 
     @Override
-    public List<ProductKindDto> selectByProductId(ProductKindDto productKindDto) throws Exception {
-        return sqlSession.selectList(namespace + "selectByProductId", productKindDto);
+    public List<ProductKindDto> selectListByProductId(String product_id) throws Exception {
+        return sqlSession.selectList(namespace + "selectByProductId", product_id);
     }
 
     @Override
@@ -42,7 +43,10 @@ public class ProductKindDaoImpl implements ProductKindDao {
     public int insertAll(List<ProductKindDto> productKindDtos) throws Exception {
         int size = productKindDtos.size();
         for (int i = 0; i < size; i++) {
-            insert(productKindDtos.get(i));
+            int result = insert(productKindDtos.get(i));
+            if(result == 0) {
+                return 0;
+            }
         }
         return 1;
     }
@@ -50,6 +54,14 @@ public class ProductKindDaoImpl implements ProductKindDao {
     @Override
     public int update(ProductKindDto productKindDto) throws Exception {
         return sqlSession.update(namespace + "update", productKindDto);
+    }
+
+    @Override
+    public int updateSaleCount(String style_num, char reason) throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("style_num", style_num);
+        map.put("reason", reason);
+        return sqlSession.update(namespace + "updateSaleCount", map);
     }
 
     @Override

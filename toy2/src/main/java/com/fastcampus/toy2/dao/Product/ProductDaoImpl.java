@@ -59,6 +59,14 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
+    public int updateSaleCount(String product_id, char reason) throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("product_id", product_id);
+        map.put("reason", reason);
+        return session.update(namespace + "updateSaleCount", map);
+    }
+
+    @Override
     public int delete(ProductDto productDto) throws SQLException {
         return session.delete(namespace + "delete", productDto);
     }
@@ -70,10 +78,32 @@ public class ProductDaoImpl implements ProductDao {
 
     public List<ProductDto> findProductpage(int page, int size) {
         int offset = (page - 1) * size;
-        HashMap<String, Integer> map = new HashMap<>();
+        HashMap<String, Object> map = new HashMap<>();
         map.put("offset", offset);
         map.put("size", size);
         return session.selectList(namespace + "selectPage", map);
     }
 
+    @Override
+    public List<ProductDto> findProductCategoryPage(List<Integer> categories, int sort, int page, int size) throws Exception {
+        int offset = (page - 1) * size;
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("category", categories);
+        map.put("sort", sort);
+        map.put("offset", offset);
+        map.put("size", size);
+        return session.selectList(namespace + "selectBySortedCategory", map);
+    }
+
+    @Override
+    public int findProductCategoryPageCount(List<Integer> categories) throws Exception {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("category", categories);
+        return session.selectOne(namespace + "selectBySortedCategoryCount", map);
+    }
+
+    @Override
+    public List<ProductDto> selectByKeyword(String keyword, int page, int size) throws Exception {
+        return session.selectList(namespace + "selectByKeyword", keyword);
+    }
 }

@@ -26,6 +26,9 @@ public class ProductStockDto {
         return Objects.hash(style_num, p_size, p_stock, sale_state);
     }
 
+    private ProductStockDto() {
+    }
+
     public ProductStockDto(Builder builder) {
         this.style_num = builder.style_num;
         this.p_size = builder.p_size;

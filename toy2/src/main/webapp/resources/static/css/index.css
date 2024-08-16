@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Tint&display=swap');
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: black;
+    text-align: center;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+.product-list {
+    display: flex;
+    justify-content: space-around;
+}
+
+.category {
+    width: 45%;
+}
+
+.category h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    cursor: pointer; /* 클릭 커서 표시 */
+}
+
+.category ul {
+    list-style-type: none;
+    padding: 0;
+    cursor: pointer; /* 클릭 커서 표시 */
+}
+
+.category ul li {
+    font-size: 18px;
+    margin: 5px 0;
+    cursor: pointer; /* 클릭 커서 표시 */
+}
+
+.top-right-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.top-right-buttons a {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+.top-right-buttons a:hover {
+    background-color: #0056b3;
+}
+
+.wrapper {
+    width: 300px;
+    height: 60px;
+    background-color: #f5f5f5;
+    margin: 0 auto; /* 화면 중앙에 가로로 배치 */
+    position: relative;
+    top: 10%; /* 화면 상단에서 아래로 10%만큼 배치 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.home {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF; /* 배경색 설정 */
+    font-family: Bungee Tint, Arial, serif;
+    font-size: 40px; /* 폰트 크기 */
+    cursor: pointer; /* 클릭 커서 표시 */
+}
+
+.mainMessage {
+    font-size: 40px;
+}
+
+.menu {
+    align-items: center;
+}

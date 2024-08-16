@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fastcampus.toy2.dao.CartItemHistoryMapper">
+    <!-- 장바구니_상품_이력에 담긴 전체 상품 체크  -->
+    <sql id="selectFromCartItemHistory">
+        SELECT hist_num, crt_id, crt_seq, mbr_id, style_num, p_size,
+               count, hist_date, hist_update, state,
+               created_dt, created_id, updated_dt, updated_id
+        FROM cart_item_history
+    </sql>
+
+<!--  CRUD  -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM cart_item_history
+    </select>
+
+    <insert id="insert" parameterType="map">
+        INSERT INTO cart_item_history(crt_id, crt_seq, mbr_id,
+                                      style_num, p_size, count,
+                                      hist_date, hist_update,
+                                      <if test="state != null">
+                                        state,
+                                      </if>
+                                      created_id, updated_id)
+        VALUES (#{cart_item.crt_id}, #{cart_item.crt_seq}, #{member.mbr_id},
+                #{cart_item.style_num}, #{cart_item.p_size}, #{cart_item.count},
+                <if test="state == null">
+                    #{cart_item.crt_item_date}, #{cart_item.crt_item_update},
+                </if>
+                <if test="state != null">
+                    #{cart_item.crt_item_update}, #{hist_date}, #{state},
+                </if>
+                #{member.mbr_id}, #{member.mbr_id})
+    </insert>
+
+    <!-- 전체 삭제  -->
+    <delete id="deleteAll">
+        DELETE FROM cart_item_history
+    </delete>
+
+    <!--  테스트를 위한 mapper : 장바구니_ID, 장바구니_일련번호를 select   -->
+    <select id="selectCartItemHistory" parameterType="CartItemDto" resultType="CartItemHistoryDto">
+        <include refid="selectFromCartItemHistory"></include>
+        WHERE crt_id = #{crt_id}
+        AND crt_seq = #{crt_seq}
+        ORDER BY hist_num DESC
+    </select>
+
+</mapper>
+
+<!--    <select id="countCartItem" parameterType="Long" resultType="int">-->
+<!--    SELECT count(*)-->
+<!--    FROM cart_item_history-->
+<!--    WHERE crt_id = #{crt_id}-->
+<!--    </select>-->

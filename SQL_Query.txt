@@ -4,7 +4,7 @@ CREATE SCHEMA `toy2` ;
 						
 CREATE TABLE `toy2`.`product` (						
 	`product_id`	CHAR(7)	NOT NULL,			
-	`p_name`	VARCHAR(30)	NOT NULL	DEFAULT '',		
+	`p_name`	VARCHAR(100)	NOT NULL	DEFAULT '',		
 	`p_gender`	CHAR(1)	NOT NULL	DEFAULT 'C',		
 	`p_origin_price`	INT	NOT NULL	DEFAULT 0,		
 	`p_sale_price`	INT	NOT NULL	DEFAULT 0,		
@@ -12,10 +12,11 @@ CREATE TABLE `toy2`.`product` (
 	`member_benefit_price`	INT	NOT NULL	DEFAULT 0,		
 	`p_average_grade`	DECIMAL(3,2)	NOT NULL	DEFAULT 0,		
 	`p_brief_text`	VARCHAR(60)	NOT NULL	DEFAULT '',		
-	`materials_care_methods`	VARCHAR(100)	NULL	DEFAULT "",		
+	`materials_care_methods`	VARCHAR(300)	NULL	DEFAULT "",		
 	`sale_state`	CHAR(1) NOT NULL DEFAULT 'Y',				
 	`main_image_url`	TEXT	NULL,			
 	`p_season`	CHAR(5)	NULL	DEFAULT 'PS001',		
+	`sale_count`	BIGINT	NOT NULL	DEFAULT 0,		
 	`category_id`	INT	NOT NULL,			
 	`created_dt`	DATETIME	NOT NULL	DEFAULT	CURRENT_TIMESTAMP,	
 	`created_id`	VARCHAR(45)	NOT NULL,			
@@ -25,9 +26,10 @@ CREATE TABLE `toy2`.`product` (
 						
 CREATE TABLE `toy2`.`product_kind` (						
 	`style_num`	CHAR(11)	NOT NULL	COMMENT '상품ID_색상코드',		
-	`Product_ID`	CHAR(7)	NOT NULL,			
+	`product_id`	CHAR(7)	NOT NULL,			
 	`color_code`	CHAR(3)	NOT NULL,			
 	`sale_state`	CHAR(1)	NOT NULL	DEFAULT 'Y',		
+	`sale_count`	BIGINT	NOT NULL	DEFAULT 0,		
 	`created_dt`	DATETIME	NOT NULL	DEFAULT	CURRENT_TIMESTAMP,	
 	`created_id`	VARCHAR(45)	NOT NULL,			
 	`updated_dt`	DATETIME	NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,			
@@ -102,7 +104,7 @@ CREATE TABLE `toy2`.`review_photo` (
 );						
 						
 CREATE TABLE `toy2`.`product_notice_content` (						
-	`Product_ID`	CHAR(7)	NOT NULL,			
+	`product_id`	CHAR(7)	NOT NULL,			
 	`required_1`	VARCHAR(20)	NULL	DEFAULT "",		
 	`content_1`	VARCHAR(50)	NULL	DEFAULT "",		
 	`required_2`	VARCHAR(20)	NULL	DEFAULT "",		
@@ -163,9 +165,9 @@ CREATE TABLE `toy2`.`product_stock_history` (
 	`updated_id`	VARCHAR(45)	NOT NULL			
 );						
 						
-CREATE TABLE `toy2`.`product_size` (						
-	`p_size`	MEDIUMINT	NOT NULL,			
+CREATE TABLE `toy2`.`product_stock` (						
 	`style_num`	CHAR(11)	NOT NULL	COMMENT '상품ID_색상코드',		
+	`p_size`	MEDIUMINT	NOT NULL,			
 	`p_stock`	INT	NULL	DEFAULT 0,		
 	`sale_state`	CHAR(1)	NULL	DEFAULT 'Y',		
 	`created_dt`	DATETIME	NOT NULL	DEFAULT	CURRENT_TIMESTAMP,	
@@ -175,7 +177,7 @@ CREATE TABLE `toy2`.`product_size` (
 );						
 						
 CREATE TABLE `toy2`.`product_detail_image` (						
-	`Product_ID`	CHAR(7)	NOT NULL,			
+	`product_id`	CHAR(7)	NOT NULL,			
 	`p_detail_image`	TEXT	NOT NULL,			
 	`p_width`	INT	NULL,			
 	`p_height`	INT	NULL,			
@@ -188,7 +190,7 @@ CREATE TABLE `toy2`.`product_detail_image` (
 );						
 						
 CREATE TABLE `toy2`.`product_info_edit_history` (						
-	`Product_ID`	CHAR(7)	NOT NULL,			
+	`product_id`	CHAR(7)	NOT NULL,			
 	`p_info_edit_num`	INT	NOT NULL,			
 	`p_name`	VARCHAR(30)	NULL	DEFAULT "",		
 	`p_gender`	CHAR(1)	NULL	DEFAULT 'C'	COMMENT '남성/여성/공용',	
@@ -210,7 +212,7 @@ CREATE TABLE `toy2`.`product_info_edit_history` (
 );						
 						
 ALTER TABLE `toy2`.`product` ADD CONSTRAINT `PK_PRODUCT` PRIMARY KEY (						
-	`Product_ID`					
+	`product_id`					
 );						
 						
 ALTER TABLE `toy2`.`product_kind` ADD CONSTRAINT `PK_PRODUCT_KIND` PRIMARY KEY (						
@@ -240,7 +242,7 @@ ALTER TABLE `toy2`.`review_photo` ADD CONSTRAINT `PK_REVIEW_PHOTO` PRIMARY KEY (
 );						
 						
 ALTER TABLE `toy2`.`product_notice_content` ADD CONSTRAINT `PK_PRODUCT_NOTICE_CONTENT` PRIMARY KEY (						
-	`Product_ID`					
+	`product_id`					
 );						
 						
 ALTER TABLE `toy2`.`product_detail_text` ADD CONSTRAINT `PK_PRODUCT_DETAIL_TEXT` PRIMARY KEY (						
@@ -257,17 +259,17 @@ ALTER TABLE `toy2`.`product_color` ADD CONSTRAINT `PK_PRODUCT_COLOR` PRIMARY KEY
 	`color_code`					
 );						
 						
-ALTER TABLE `toy2`.`product_size` ADD CONSTRAINT `PK_PRODUCT_SIZE` PRIMARY KEY (						
+ALTER TABLE `toy2`.`product_stock` ADD CONSTRAINT `PK_PRODUCT_SIZE` PRIMARY KEY (						
 	`p_size`,					
 	`style_num`					
 );						
 						
 ALTER TABLE `toy2`.`product_detail_image` ADD CONSTRAINT `PK_PRODUCT_DETAIL_IMAGE` PRIMARY KEY (						
-	`Product_ID`					
+	`product_id`					
 );						
 						
 ALTER TABLE `toy2`.`product_info_edit_history` ADD CONSTRAINT `PK_PRODUCT_INFO_EDIT_HISTORY` PRIMARY KEY (						
-	`Product_ID`,					
+	`product_id`,					
 	`p_info_edit_num`					
 );						
 						
@@ -537,10 +539,10 @@ CREATE TABLE `toy2`.`ADMN` (
 	`admn_stat`	char(5)	NOT NULL	DEFAULT 'Y'	COMMENT '유효 / 정지 / 퇴사 / 잠김',	
 	`admn_name`	varchar(50)	NOT NULL,			
 	`admn_email`	varchar(100)	NULL,			
-`created_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-`created_id` VARCHAR(45) NOT NULL,
-`updated_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-`updated_id` VARCHAR(45) NOT NULL	
+`created_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,						
+`created_id` VARCHAR(45) NOT NULL,						
+`updated_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,						
+`updated_id` VARCHAR(45) NOT NULL						
 );						
 						
 						
@@ -550,28 +552,27 @@ CREATE TABLE `toy2`.`1on1_ANSW` (
 	`1on1_answ_email`	char	NOT NULL	DEFAULT 'Y',		
 	`1on1_answ_stat`	char(1)	NOT NULL,			
 	`1on1_answ_date`	datetime	NOT NULL,			
-	`1on1_answ_content`	text	NOT NULL,
-`created_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-`created_id` VARCHAR(45) NOT NULL,
-`updated_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-`updated_id` VARCHAR(45) NOT NULL
+	`1on1_answ_content`	text	NOT NULL,			
+`created_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,						
+`created_id` VARCHAR(45) NOT NULL,						
+`updated_dt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,						
+`updated_id` VARCHAR(45) NOT NULL						
 );						
 						
 						
 CREATE TABLE `toy2`.`member` (						
 	`mbr_id`	VARCHAR(50)	NOT NULL,			
-	`mbr_state_cd`	INT	NULL	DEFAULT 1,		
+	`mbr_status_cd`	INT	NULL	DEFAULT 1,		
 	`login_fail_cnt`	INT	NULL	DEFAULT 0	COMMENT '연속 3번 실패시 상태코드 변경',	
-	`pw`	VARCHAR(200)	NULL,			
+	`pw`	VARCHAR(200)	NOT NULL,			
 	`id_save_yn`	CHAR	NULL	DEFAULT 'N',		
 	`last_access_date`	DATE	NULL,			
 	`mbr_grade_cd`	INT	NULL	DEFAULT 1	COMMENT '1~5등급(낮-높)',	
 	`name`	VARCHAR(50)	NOT NULL,			
 	`birth`	DATE	NOT NULL,			
-	`solar_lunar`	CHAR	NULL	DEFAULT 'S'	COMMENT '양력=S, 음력=L',	
 	`gender`	CHAR	NOT NULL,			
 	`phone_num`	VARCHAR(50)	NOT NULL,			
-	`email`	VARCHAR(50)	NOT NULL,			
+	`email`	VARCHAR(50)	NULL,			
 	`addr_cd`	VARCHAR(10)	NULL,			
 	`addr_line1`	VARCHAR(255)	NULL,			
 	`addr_line2`	VARCHAR(255)	NULL,			
@@ -586,10 +587,11 @@ CREATE TABLE `toy2`.`member` (
 	`created_id`	VARCHAR(45)	NOT NULL,			
 	`updated_dt`	DATETIME	NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,			
 	`updated_id`	VARCHAR(45)	NOT NULL			
+						
 );						
 						
 CREATE TABLE `toy2`.`non_member` (						
-	`nm_id`	VARCHAR(20)	NOT NULL	COMMENT '비회원 주문이 생성됐을 때 생성됨',		
+	`ord_id`	varchar(16)	NOT NULL,			
 	`name`	VARCHAR(50)	NOT NULL,			
 	`phone_num`	VARCHAR(50)	NOT NULL,			
 	`email`	VARCHAR(50)	NOT NULL,			
@@ -602,7 +604,7 @@ CREATE TABLE `toy2`.`non_member` (
 	`created_id`	VARCHAR(45)	NOT NULL,			
 	`updated_dt`	DATETIME	NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,			
 	`updated_id`	VARCHAR(45)	NOT NULL			
-);								
+);						
 						
 CREATE TABLE `toy2`.`member_state_history` (						
 	`mbr_state_history_id`	INT	NOT NULL,			
@@ -720,6 +722,279 @@ ALTER TABLE `toy2`.`faq` ADD CONSTRAINT `PK_FAQ` PRIMARY KEY (
 ALTER TABLE `toy2`.`member_delete_history` ADD CONSTRAINT `PK_MEMBER_DELETE_HISTORY` PRIMARY KEY (						
 	`mbr_delete_history_id`,					
 	`mbr_id`					
-);
-
-commit;
+);						
+						
+alter table `toy2`.cart drop column nm_id;						
+alter table `toy2`.cart						
+change cart_id crt_id varchar(16) not null comment '장바구니+년월일+날짜';						
+alter table toy2.orders drop column nm_id;						
+						
+						
+alter table `toy2`.orders						
+drop column Field9;						
+						
+alter table `toy2`.cart						
+modify crt_id bigint auto_increment comment '장바구니 번호';						
+						
+alter table `toy2`.cart						
+auto_increment = 1;						
+						
+alter table `toy2`.cart						
+add crt_date timestamp default now() null comment '장바구니 등록일' after mbr_id;						
+						
+alter table `toy2`.cart						
+drop column crt_st;						
+						
+alter table `toy2`.cart_item						
+add crt_item_date timestamp default now() null comment '장바구니 상품 등록일' after count;						
+						
+alter table `toy2`.cart_item						
+drop column ord_st;						
+						
+alter table `toy2`.cart_item						
+modify crt_id bigint not null;						
+						
+alter table `toy2`.order_item						
+modify crt_id bigint not null;						
+						
+create table `toy2`.cart_item_history						
+(						
+hist_num        bigint auto_increment						
+primary key,						
+crt_id          bigint                              not null,						
+crt_seq         int                                 not null,						
+mbr_id          varchar(20)                         null,						
+style_num       char(11)                            not null comment '상품ID_색상코드',						
+p_size          mediumint                           not null,						
+count           int                                 not null,						
+hist_date   timestamp                           not null comment '장바구니 상품 상태 등록일',						
+hist_update timestamp                           not null comment '장바구니 상품 상태 변경일',						
+state           char      default 'I'               null comment 'I: insert, U: update, D: delete',						
+created_dt      timestamp default CURRENT_TIMESTAMP null,						
+created_id      varchar(20)                         not null,						
+updated_dt      timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,						
+updated_id      varchar(20)                         not null						
+);						
+						
+alter table `toy2`.cart_item						
+drop column state;						
+						
+alter table `toy2`.shipping_addr						
+drop primary key;						
+						
+alter table `toy2`.shipping_addr						
+add primary key (mbr_id , id);						
+						
+alter table `toy2`.shipping_addr						
+change id seq bigint not null;						
+						
+alter table `toy2`.cart_item						
+add crt_item_update timestamp default CURRENT_TIMESTAMP null comment '장바구니 상품 수정일' after crt_item_date;						
+						
+						
+commit;						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						
+						

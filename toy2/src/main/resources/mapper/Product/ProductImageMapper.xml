@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fastcampus.toy2.dao.Product.ProductImageMapper">
+    <sql id="selectFromProductImage">
+        SELECT p_photo_num, style_num,
+               photo_url, width, height, size,
+                using_state, show_priority,
+                created_dt, created_id, updated_dt, updated_id
+        FROM product_image
+    </sql>
+
+
+    <!-- 우선순위가 높은 상품 사진 정보 select -->
+    <select id="selectMainImageByStyleNum" parameterType="String" resultType="ProductImageDto">
+        <include refid="selectFromProductImage"></include>
+        WHERE style_num = #{style_num}
+        AND using_state = 'Y'
+        ORDER BY show_priority
+        LIMIT 1
+    </select>
+</mapper>

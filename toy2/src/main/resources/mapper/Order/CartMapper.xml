@@ -4,7 +4,8 @@
 
 <mapper namespace="com.fastcampus.toy2.dao.CartMapper">
     <sql id="selectFromCart">
-        SELECT crt_id, mbr_id, crt_st
+        SELECT crt_id, mbr_id,
+               created_dt, created_id, updated_dt, updated_id
         FROM cart
     </sql>
 
@@ -14,6 +15,25 @@
         SELECT count(*)
         FROM cart
     </select>
+
+    <!--  장바구니 ID로 검색  -->
+    <select id="selectCartId" parameterType="Long" resultType="CartDto">
+        <include refid="selectFromCart"/>
+        WHERE
+            crt_id = #{crt_id}
+    </select>
+
+    <!--   고객의 장바구니가 존재하는지 확인  -->
+    <select id="selectUserCart" parameterType="String" resultType="CartDto">
+        <include refid="selectFromCart"/>
+        WHERE mbr_id = #{mbr_id}
+    </select>
+
+    <!--   고객의 장바구니 삭제  -->
+    <delete id="deleteUserCart" parameterType="String">
+        DELETE FROM cart
+        WHERE mbr_id = #{mbr_id}
+    </delete>
 
 <!--  CRUD 작성  -->
 <!--
@@ -31,44 +51,10 @@
   -->
 <!--  생각해보니까 crt_id는 만들어지는 컬럼이므로 바로 반환하지 않아도 될 것 같음!  -->
 <!--    <insert id="insert" parameterType="CartDto" useGeneratedKeys="true" keyProperty="crt_id">-->
-    <insert id="insert" parameterType="CartDto">
+    <insert id="insert" parameterType="CartDto" useGeneratedKeys="true" keyProperty="crt_id">
         INSERT INTO cart(crt_id, mbr_id, created_id, updated_id)
             VALUES (#{crt_id}, #{mbr_id}, #{mbr_id}, #{mbr_id})
     </insert>
-
-    <!--기존의 장바구니가 사라지고 새로운 장바구니를 추가하는 경우 기존의 장바구니의 상태는 비활성화-->
-    <update id="update" parameterType="String">
-        UPDATE cart
-        SET crt_st = 'N'
-        WHERE crt_id = #{crt_id}
-    </update>
-    <!--  기존 장바구니 정보를 가지고 새로운 장바구니를 생성  -->
-    <insert id="insertRe" parameterType="CartDto" useGeneratedKeys="true" keyProperty="crt_id">
-        INSERT INTO cart(crt_id, mbr_id, crt_st, created_id, updated_id)
-        VALUES (#{crt_id}, #{mbr_id}, #{crt_st}, #{mbr_id}, #{mbr_id})
-    </insert>
-
-    <!--  해당하는 연월일에 생성되어 있는 장바구니 중 제일 높은 번호를 구하기
-    (바로 구매하기해도 장바구니에 담기는 것 확인하기)  -->
-    <select id="maxCartSeq" parameterType="String" resultType="String">
-        SELECT MAX(SUBSTR(crt_id, 11))
-        FROM cart
-        WHERE crt_id LIKE CONCAT(#{datePart}, '%');
-    </select>
-
-    <!--   고객의 활성상태 장바구니가 존재하는지 확인  -->
-    <select id="userCartActive" parameterType="String" resultType="CartDto">
-        <include refid="selectFromCart"/>
-        WHERE mbr_id = #{mbr_id}
-            AND crt_st = 'Y'
-    </select>
-
-    <!--  장바구니 ID로 검색  -->
-    <select id="selectCartId" parameterType="String" resultType="CartDto">
-        <include refid="selectFromCart"/>
-        WHERE
-            crt_id = #{crt_id}
-    </select>
 
     <!-- 전체 삭제  -->
     <delete id="deleteAll">
@@ -90,3 +76,32 @@
     </select>
 
 </mapper>
+
+
+
+        <!--    &lt;!&ndash;기존의 장바구니가 사라지고 새로운 장바구니를 추가하는 경우 기존의 장바구니의 상태는 비활성화 updateStatus&ndash;&gt;-->
+        <!--    <update id="update" parameterType="int">-->
+        <!--        UPDATE cart-->
+        <!--        SET crt_st = 'N'-->
+        <!--        WHERE crt_id = #{crt_id}-->
+        <!--    </update>-->
+        <!--    &lt;!&ndash;  기존 장바구니 정보를 가지고 새로운 장바구니를 생성  &ndash;&gt;-->
+        <!--    <insert id="insertRe" parameterType="CartDto" useGeneratedKeys="true" keyProperty="crt_id">-->
+        <!--        INSERT INTO cart(crt_id, mbr_id, crt_st, created_id, updated_id)-->
+        <!--        VALUES (#{crt_id}, #{mbr_id}, #{crt_st}, #{mbr_id}, #{mbr_id})-->
+        <!--    </insert>-->
+
+        <!--    해당하는 연월일에 생성되어 있는 장바구니 중 제일 높은 번호를 구하기-->
+        <!--    (바로 구매하기해도 장바구니에 담기는 것 확인하기)  &ndash;&gt;-->
+        <!--    <select id="maxCartSeq" parameterType="String" resultType="String">-->
+        <!--        SELECT MAX(SUBSTR(crt_id, 11))-->
+        <!--        FROM cart-->
+        <!--        WHERE crt_id LIKE CONCAT(#{datePart}, '%');-->
+        <!--    </select>-->
+
+        <!--    &lt;!&ndash;   고객의 활성상태 장바구니가 존재하는지 확인  &ndash;&gt;-->
+        <!--    <select id="userCartActive" parameterType="String" resultType="CartDto">-->
+        <!--        <include refid="selectFromCart"/>-->
+        <!--        WHERE mbr_id = #{mbr_id}-->
+        <!--            AND crt_st = 'Y'-->
+        <!--    </select>-->

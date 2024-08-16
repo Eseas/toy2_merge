@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.Objects;
 
 public class ProductDto {
-    private String product_id;
+	private String product_id;
     private String p_name;
     private String p_gender;
     private Integer p_origin_price;
@@ -18,6 +18,7 @@ public class ProductDto {
     private String main_image_url;
     private String p_season;
     private Integer category_id;
+    private Long sale_count;
     private Date created_dt;
     private String created_id;
     private Date updated_dt;
@@ -37,6 +38,7 @@ public class ProductDto {
                 ", p_brief_text='" + p_brief_text + '\'' +
                 ", materials_care_methods='" + materials_care_methods + '\'' +
                 ", sale_state='" + sale_state + '\'' +
+                ", sale_count='" + sale_count + '\'' +
                 ", main_image_url='" + main_image_url + '\'' +
                 ", p_season='" + p_season + '\'' +
                 ", category_id=" + category_id +
@@ -54,21 +56,22 @@ public class ProductDto {
         ProductDto productDto = (ProductDto) o;
         return
                 Objects.equals(product_id, productDto.getProduct_id()) &&
-                        Objects.equals(p_name, productDto.getP_name()) &&
-                        Objects.equals(p_gender, productDto.getP_gender()) &&
-                        Objects.equals(p_origin_price, productDto.getP_origin_price()) &&
-                        Objects.equals(p_sale_price, productDto.getP_sale_price()) &&
-                        Objects.equals(p_discount_per, productDto.getP_discount_per()) &&
-                        Objects.equals(member_benefit_price, productDto.getMember_benefit_price()) &&
-                        Objects.equals(p_average_grade, productDto.getP_average_grade()) &&
-                        Objects.equals(p_brief_text, productDto.getP_brief_text()) &&
-                        Objects.equals(materials_care_methods, productDto.getMaterials_care_methods()) &&
-                        Objects.equals(sale_state, productDto.getSale_state()) &&
-                        Objects.equals(main_image_url, productDto.getMain_image_url()) &&
-                        Objects.equals(p_season, productDto.getP_season()) &&
-                        Objects.equals(category_id, productDto.getCategory_id()) &&
-                        Objects.equals(created_id, productDto.getCreated_id()) &&
-                        Objects.equals(updated_id, productDto.getUpdated_id());
+                Objects.equals(p_name, productDto.getP_name()) &&
+                Objects.equals(p_gender, productDto.getP_gender()) &&
+                Objects.equals(p_origin_price, productDto.getP_origin_price()) &&
+                Objects.equals(p_sale_price, productDto.getP_sale_price()) &&
+                Objects.equals(p_discount_per, productDto.getP_discount_per()) &&
+                Objects.equals(member_benefit_price, productDto.getMember_benefit_price()) &&
+                Objects.equals(p_average_grade, productDto.getP_average_grade()) &&
+                Objects.equals(p_brief_text, productDto.getP_brief_text()) &&
+                Objects.equals(materials_care_methods, productDto.getMaterials_care_methods()) &&
+                Objects.equals(sale_state, productDto.getSale_state()) &&
+                Objects.equals(main_image_url, productDto.getMain_image_url()) &&
+                Objects.equals(p_season, productDto.getP_season()) &&
+                Objects.equals(category_id, productDto.getCategory_id()) &&
+                Objects.equals(sale_count, productDto.getSale_count()) &&
+                Objects.equals(created_id, productDto.getCreated_id()) &&
+                Objects.equals(updated_id, productDto.getUpdated_id());
     }
 
     @Override
@@ -94,6 +97,7 @@ public class ProductDto {
         this.main_image_url = builder.main_image_url;
         this.p_season = builder.p_season;
         this.category_id = builder.category_id;
+        this.sale_count = builder.sale_count;
         this.created_dt = builder.created_dt;
         this.created_id = builder.created_id;
         this.updated_dt = builder.updated_dt;
@@ -115,6 +119,7 @@ public class ProductDto {
         private String main_image_url;
         private String p_season;
         private Integer category_id;
+        private Long sale_count;
         private Date created_dt;
         private String created_id;
         private Date updated_dt;
@@ -193,6 +198,11 @@ public class ProductDto {
             return this;
         }
 
+        public Builder sale_count(Long sale_count) {
+            this.sale_count = sale_count;
+            return this;
+        }
+
         public Builder created_dt(Date created_dt) {
             this.created_dt = created_dt;
             return this;
@@ -217,6 +227,7 @@ public class ProductDto {
             return new ProductDto(this);
         }
     }
+
 
     public String getProduct_id() {
         return product_id;
@@ -272,6 +283,18 @@ public class ProductDto {
 
     public Integer getCategory_id() {
         return category_id;
+    }
+
+    public Long getSale_count() {
+        return sale_count;
+    }
+
+    public Date getCreated_dt() {
+        return created_dt;
+    }
+
+    public Date getUpdated_dt() {
+        return updated_dt;
     }
 
     public String getCreated_id() {

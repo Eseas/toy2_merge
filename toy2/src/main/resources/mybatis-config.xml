@@ -6,14 +6,14 @@
     <typeAliases>
         <typeAlias alias="CartDto" type="com.fastcampus.toy2.domain.Order.CartDto"/>
         <typeAlias alias="CartItemDto" type="com.fastcampus.toy2.domain.Order.CartItemDto"/>
-        <!--<typeAlias alias="CartItemHistoryDto" type="com.fastcampus.toy2.domain.Order.CartItemHistoryDto"/>-->
-        <!--<typeAlias alias="CartItemInfoDto" type="com.fastcampus.toy2.domain.Order.CartItemInfoDto"/>-->
+        <typeAlias alias="CartItemHistoryDto" type="com.fastcampus.toy2.domain.Order.CartItemHistoryDto"/>
+        <typeAlias alias="CartItemInfoDto" type="com.fastcampus.toy2.domain.Order.CartItemInfoDto"/>
         <typeAlias alias="MemberDto" type="com.fastcampus.toy2.domain.User.MemberDto"/>
         <typeAlias alias="ProductColorDto" type="com.fastcampus.toy2.domain.Product.ProductColorDto"/>
         <typeAlias alias="ProductKindDto" type="com.fastcampus.toy2.domain.Product.ProductKindDto"/>
         <typeAlias alias="ProductDto" type="com.fastcampus.toy2.domain.Product.ProductDto"/>
         <typeAlias alias="ProductStockDto" type="com.fastcampus.toy2.domain.Product.ProductStockDto"/>
-        <!--<typeAlias alias="ProductImageDto" type="com.fastcampus.toy2.domain.Product.ProductImageDto"/>-->
-        <!--<typeAlias alias="ProductDetailDto" type="com.fastcampus.toy2.domain.Order.ProductDetailDto"/>-->
+        <typeAlias alias="ProductImageDto" type="com.fastcampus.toy2.domain.Product.ProductImageDto"/>
+        <typeAlias alias="ProductDetailDto" type="com.fastcampus.toy2.domain.Order.ProductDetailDto"/>
     </typeAliases>
 </configuration>

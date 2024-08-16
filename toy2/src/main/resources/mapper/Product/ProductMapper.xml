@@ -1,7 +1,362 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fastcampus.toy2.dao.ProductMapper">
+<mapper namespace="com.fastcampus.toy2.dao.Product.ProductMapper">
+    <!-- count -->
+    <select id="count" resultType="int">
+        SELECT count(*)
+        FROM product
+    </select>
+    <select id="salecount" resultType="int">
+        SELECT count(*)
+        FROM product
+        WHERE sale_state = 'Y'
+    </select>
 
+    <!-- select -->
+    <sql id="selectProduct">
+        SELECT
+            product_id,
+            p_name,
+            p_gender,
+            p_origin_price,
+            p_sale_price,
+            p_discount_per,
+            member_benefit_price,
+            p_average_grade,
+            p_brief_text,
+            materials_care_methods,
+            sale_state,
+            sale_count,
+            main_image_url,
+            p_season,
+            category_id,
+            created_dt,
+            created_id,
+            updated_dt,
+            updated_id
+        FROM
+            product
+    </sql>
+    <!--
+    SELECT
+    	product_id,
+    	p_name,
+    	p_gender,
+    	p_origin_price,
+    	p_sale_price,
+    	p_discount_per,
+    	member_benefit_price,
+    	p_average_grade,
+    	p_brief_text,
+    	materials_care_methods,
+    	sale_state,
+    	main_image_url,
+    	p_season,
+    	category_id
+    FROM
+    	product
+    WHERE
+    	product_id = '7K27620' and sale_state = 'Y'
+    ;
+    -->
+    <!-- ORDER BY 집어넣기. -->
+    <select id="selectOneById" parameterType="String" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE product_id = #{product_id}
+    </select>
+    <select id="selectAll" resultType="ProductDto">
+        <include refid="selectProduct" />
+    </select>
+    <!--
+    SELECT *
+    FROM product
+    WHERE sale_state = 'Y'
+    -->
+    <select id="selectSale" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE sale_state = 'Y'
+    </select>
+    <select id="selectPage" parameterType="hashMap" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE sale_state = 'Y'
+        LIMIT #{offset}, #{size}
+    </select>
+    <select id="selectCategoryPage" parameterType="hashMap" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE
+            category_id IN #{category_id}
+        and sale_state = 'Y'
+        LIMIT #{offset}, #{size}
+    </select>
+    <!--
+    select *
+    from product
+    where p_gender = 'M'
+    UNION ALL
+    select *
+    from product
+    where p_gender = 'C';
+    -->
+    <select id="selectFeMale" parameterType="map" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE p_gender IN ('F', 'C')
+    </select>
+    <select id="selectMale" parameterType="map" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE p_gender IN ('M', 'C')
+    </select>
+
+    <!-- 카테고리 검색 -->
+    <select id="selectBySortedCategoryCount" parameterType="map" resultType="int">
+        select count(*) from product
+        WHERE 1=1  <!-- 기본 조건 설정 -->
+        <if test="category != null and category.size() > 0">
+            AND category_id IN
+            <foreach collection="category" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        AND sale_state = 'Y'
+    </select>
+    <!-- sort를 enum으로 만들어서 넘겨주는 게 좋을까? -->
+    <select id="selectBySortedCategory" parameterType="map" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE 1=1  <!-- 기본 조건 설정 -->
+
+        <if test="category != null and category.size() > 0">
+            AND category_id IN
+            <foreach collection="category" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+        AND sale_state = 'Y'
+
+        <choose>
+            <when test='sort == 1'>
+                ORDER BY p_name ASC
+            </when>
+            <when test='sort == 2'>
+                ORDER BY sale_count DESC
+            </when>
+            <when test='sort == 3'>
+                ORDER BY created_dt ASC
+            </when>
+            <when test='sort == 4'>
+                ORDER BY p_sale_price ASC
+            </when>
+            <when test='sort == 5'>
+                ORDER BY p_sale_price DESC
+            </when>
+        </choose>
+
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <!-- 검색 -->
+    <!-- Product ID > I -->
+    <!-- p_name     > N -->
+    <sql id="searchCondition">
+        <choose>
+            <when test='option=="S"'>
+                AND product_id LIKE concat('%', #{keyword}, '%')
+            </when>
+            <when test='option=="N"'>
+                AND p_name LIKE concat('%', #{keyword}, '%')
+            </when>
+            <otherwise>
+                AND (product_id   LIKE concat('%', #{keyword}, '%')
+                OR   p_name LIKE concat('%', #{keyword}, '%'))
+            </otherwise>
+        </choose>
+    </sql>
+
+    <!-- 검색 -->
+    <select id="selectByKeyword" parameterType="map" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE true
+        <include refid="searchCondition"/>
+        and sale_state = 'Y'
+        ORDER BY created_dt DESC, p_name DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+
+    <select id="selectByKeywordCount" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM  product
+        WHERE true
+        <include refid="searchCondition"/>
+        and sale_state = 'Y'
+    </select>
+
+    <select id="selectForUpdate" parameterType="String" resultType="ProductDto">
+        <include refid="selectProduct" />
+        WHERE product_id = #{product_id}
+        FOR UPDATE
+    </select>
+
+    <!-- insert -->
+    <!--
+    INSERT INTO product
+	(
+	    product_id,
+        p_name,
+        p_gender,
+        p_origin_price,
+        p_sale_price,
+        p_discount_per,
+        member_benefit_price,
+        p_average_grade,
+        p_brief_text,
+        materials_care_methods,
+        sale_state,
+        main_image_url,
+        p_season,
+        category_id,
+        created_id,
+        updated_id)
+    VALUES
+    (
+        '7K27620',
+        '여성%NEPA%WHISTLIZER',
+        'C',
+        269000,
+        199000,
+        26,
+        199000,
+        2.25,
+        '아웃도어',
+        '신발갑피1폴리에스터100',
+        'Y',
+        '',
+        'A',
+        1,
+        'qweasd',
+        'asdqwe'
+    );
+    -->
+    <insert id="insert" parameterType="ProductDto">
+        INSERT INTO product
+        (
+            product_id,
+            p_name,
+            p_gender,
+            p_origin_price,
+            p_sale_price,
+            p_discount_per,
+            member_benefit_price,
+            p_average_grade,
+            p_brief_text,
+            materials_care_methods,
+            sale_state,
+            sale_count,
+            main_image_url,
+            p_season,
+            category_id,
+            created_id,
+            updated_id
+        )
+        VALUES
+        (
+            #{product_id},
+            #{p_name},
+            #{p_gender},
+            #{p_origin_price},
+            #{p_sale_price},
+            #{p_discount_per},
+            #{member_benefit_price},
+            #{p_average_grade},
+            #{p_brief_text},
+            #{materials_care_methods},
+            #{sale_state},
+            #{sale_count},
+            #{main_image_url},
+            #{p_season},
+            #{category_id},
+            #{created_id},
+            #{updated_id}
+        )
+    </insert>
+
+    <!-- updated
+    UPDATE product
+    SET
+    product_id = '7K27620',
+    p_name = '여성%NEPA%WHISTLIZER',
+    p_gender = 'C',
+    p_origin_price = 250000,
+    p_sale_price = 140000,
+    p_discount_per = 46,
+    member_benefit_price = 140000,
+    p_average_grade = 2.25,
+    p_brief_text = '아웃도어',
+    materials_care_methods = '신발갑피1폴리에스터100',
+    sale_state = 'Y',
+    main_image_url = 'asdasd',
+    p_season = 'A',
+    category_id = 1,
+    updated_id = 'aaaaaa'
+    WHERE
+    product_id = '7K27620'
+;
+    -->
+    <update id="update" parameterType="ProductDto">
+        UPDATE product
+        SET
+            p_name = #{p_name},
+            p_gender = #{p_gender},
+            p_origin_price = #{p_origin_price},
+            p_sale_price = #{p_sale_price},
+            p_discount_per = #{p_discount_per},
+            member_benefit_price = #{member_benefit_price},
+            p_average_grade = #{p_average_grade},
+            p_brief_text = #{p_brief_text},
+            materials_care_methods = #{materials_care_methods},
+            sale_state = #{sale_state},
+            main_image_url = #{main_image_url},
+            p_season = #{p_season},
+            category_id = #{category_id},
+            updated_id = #{updated_id}
+        WHERE
+            product_id = #{product_id}
+    </update>
+
+    <update id="updateState" parameterType="ProductDto">
+        UPDATE product
+        SET
+            <choose>
+                <when test="sale_state == 'Y'">
+                    sale_state = 'N'
+                </when>
+                <otherwise>
+                    sale_state = 'Y"
+                </otherwise>
+            </choose>
+        WHERE product_id = #{product_id}
+    </update>
+    <update id="updateSaleCount" parameterType="map">
+        UPDATE product
+        SET
+        <choose>
+            <when test="reason=='S'">
+                sale_count = sale_count + 1
+            </when>
+            <otherwise>
+                sale_count = sale_count - 1
+            </otherwise>
+        </choose>
+        WHERE product_id = #{product_id}
+    </update>
+
+    <!-- delete -->
+    <delete id="delete" parameterType="ProductDto">
+        DELETE FROM product
+        WHERE product_id = #{id}
+    </delete>
+    <delete id="deleteAll">
+        DELETE FROM product
+    </delete>
 </mapper>

@@ -1,15 +1,18 @@
 package com.fastcampus.toy2.domain.Order;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Objects;
 
 public class CartDto {
-    private String crt_id;
+//    @NonNull
+    private Long crt_id;
     private String mbr_id;
-    private char crt_st;
+    private Timestamp created_dt;
+    private String created_id;
+    private Timestamp updated_dt;
+    private String updated_id;
 
-    CartDto() {
+    public CartDto() {
 
     }
 
@@ -18,7 +21,7 @@ public class CartDto {
         this.mbr_id = builder.mbr_id;
     }
 
-    public String getCrt_id() {
+    public Long getCrt_id() {
         return crt_id;
     }
 
@@ -26,16 +29,11 @@ public class CartDto {
         return mbr_id;
     }
 
-    public char getCrt_st() {
-        return crt_st;
-    }
-
     @Override
     public String toString() {
         return "CartDto{" +
                 "crt_id='" + crt_id + '\'' +
                 ", mbr_id='" + mbr_id + '\'' +
-                ", crt_st=" + crt_st +
                 '}';
     }
 
@@ -44,19 +42,19 @@ public class CartDto {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CartDto cartDto = (CartDto) o;
-        return crt_st == cartDto.crt_st && Objects.equals(crt_id, cartDto.crt_id) && Objects.equals(mbr_id, cartDto.mbr_id);
+        return Objects.equals(crt_id, cartDto.crt_id) && Objects.equals(mbr_id, cartDto.mbr_id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(crt_id, mbr_id, crt_st);
+        return Objects.hash(crt_id, mbr_id);
     }
 
     public static class Builder {
-        private String crt_id;
+        private Long crt_id;
         private String mbr_id;
 
-        public Builder crt_id(String crt_id) {
+        public Builder crt_id(Long crt_id) {
             this.crt_id = crt_id;
             return this;
         }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fastcampus.toy2.dao.Product.ProductCategoryMapper">
+    <select id="selectById" parameterType="int" resultType="ProductCategoryDto">
+        SELECT category_id, category, upper_category_id, using_state, created_dt, created_id, updated_dt, updated_id
+        FROM p_category
+        WHERE category_id = #{category_id}
+    </select>
+    <select id="selectUpperEquals" parameterType="int" resultType="ProductCategoryDto">
+        SELECT category_id, category, upper_category_id, using_state, created_dt, created_id, updated_dt, updated_id
+        FROM p_category
+        WHERE upper_category_id = #{upper_category_id}
+    </select>
+</mapper>

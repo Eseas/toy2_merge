@@ -1,0 +1,160 @@
+.shopping-bag {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.shopping-bag-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+.left {
+    width: 65%;
+}
+
+.right {
+    width: 30%;
+}
+
+.head, .nepa-selection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.cb__style1 {
+    margin-right: 10px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.delete__btn {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 10px;
+    text-decoration: none;
+}
+
+.delete__btn:hover {
+    color: #333;
+}
+
+.order__list {
+    list-style: none;
+    padding: 0;
+}
+
+.product-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+}
+
+.product-item:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+}
+
+.photo img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.info {
+    width: 50%;
+}
+
+.info p {
+    margin: 5px 0;
+}
+
+.btn-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 200px;
+}
+
+.option__btn.white {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #ddd;
+    text-decoration: none;
+    text-align: center;
+    padding: 10px;
+    width: 45%;
+    box-sizing: border-box;
+}
+
+.buy__btn.black {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px;
+    width: 45%;
+    box-sizing: border-box;
+}
+
+.total-box {
+    border: 1px solid #ddd;
+    padding: 20px;
+}
+
+.total-box dl {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.total-box .total dl {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.buy__btn.on {
+    background-color: #000;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-top: 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
+}
+
+.info-text {
+    font-size: 0.85em;
+    color: #555;
+    margin-top: 20px;
+}
+
+.empty-cart-message {
+    text-align: center;
+    font-size: 13px;
+    color: #fff;
+    background-color: #000;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 20px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}

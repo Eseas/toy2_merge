@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fastcampus.toy2.dao.Product.ProductKindMapper">
+<mapper namespace="com.fastcampus.toy2.dao.Product.ProductStockMapper">
     <!-- count -->
     <select id="count">
         SELECT count(*)
@@ -12,24 +12,29 @@
     <!-- select -->
     <sql id="select">
         SELECT
-            style_num,
-            p_size,
-            p_stock,
-            sale_state,
-            created_dt,
-            created_id,
-            updated_dt,
-            updated_id
+        style_num,
+        p_size,
+        p_stock,
+        sale_state,
+        created_dt,
+        created_id,
+        updated_dt,
+        updated_id
         FROM product_stock
     </sql>
     <!-- -->
-    <select id="selectByStyleNum" parameterType="String" resultType="ProductStockDto">
+    <select id="selectByStyleNum" parameterType="String" resultType="com.fastcampus.toy2.domain.Product.ProductStockDto">
         <include refid="select" />
         WHERE style_num = #{style_num}
     </select>
 
     <!-- insert -->
     <!-- update -->
+    <update id="changeStock" parameterType="hashMap">
+        UPDATE product_stock
+        SET p_stock = #{p_stock}
+        WHERE style_num = #{style_num}
+    </update>
     <!-- delete -->
 
 </mapper>

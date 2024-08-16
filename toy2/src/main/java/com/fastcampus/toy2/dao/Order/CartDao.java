@@ -9,11 +9,14 @@ public interface CartDao {
 
     int insert(CartDto cartDto) throws Exception;
 
-    int update(String crt_id) throws Exception;
+    int update(Long crt_id) throws Exception;
 
-    CartDto selectCartId(String crt_id) throws Exception;
+    CartDto selectCartId(Long crt_id) throws Exception;
 
     String maxCartSeq(String datePart) throws Exception;
 
-    CartDto selectUserCartActive(String mbr_id) throws Exception;
+//    CartDto selectUserCart(String mbr_id) throws Exception;
+    CartDto selectUserCart(String mbr_id) throws Exception;
+
+    int deleteUserCart(String mbr_id) throws Exception;
 }
