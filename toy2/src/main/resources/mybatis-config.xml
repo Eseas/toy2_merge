@@ -15,5 +15,6 @@
         <typeAlias alias="ProductStockDto" type="com.fastcampus.toy2.domain.Product.ProductStockDto"/>
         <typeAlias alias="ProductImageDto" type="com.fastcampus.toy2.domain.Product.ProductImageDto"/>
         <typeAlias alias="ProductDetailDto" type="com.fastcampus.toy2.domain.Order.ProductDetailDto"/>
+        <typeAlias alias="ProductCategoryDto" type="com.fastcampus.toy2.domain.Product.ProductCategoryDto"/>
     </typeAliases>
 </configuration>

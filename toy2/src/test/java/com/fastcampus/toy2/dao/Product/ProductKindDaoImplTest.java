@@ -26,6 +26,7 @@ public class ProductKindDaoImplTest {
                 .product_id("7K00000")
                 .color_code("B01")
                 .sale_state("Y")
+                .sale_count(0L)
                 .created_id("등록자1")
                 .updated_id("등록자1")
                 .build());
@@ -34,6 +35,7 @@ public class ProductKindDaoImplTest {
                 .product_id("7K00000")
                 .color_code("B01")
                 .sale_state("Y")
+                .sale_count(0L)
                 .created_id("등록자1")
                 .updated_id("등록자1")
                 .build());
@@ -42,6 +44,7 @@ public class ProductKindDaoImplTest {
                 .product_id("7K00000")
                 .color_code("J08")
                 .sale_state("Y")
+                .sale_count(0L)
                 .created_id("등록자1")
                 .updated_id("등록자1")
                 .build());

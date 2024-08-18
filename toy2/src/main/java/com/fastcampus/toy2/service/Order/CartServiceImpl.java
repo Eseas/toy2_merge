@@ -175,7 +175,7 @@ public class CartServiceImpl implements CartService {
         String product_id = productInfo.get("product_id");
 
         // 2. product_id로 모든 관련된 style_num들을 조회(productKind 테이블)
-        List<ProductKindDto> productKinds = productKindDao.selectByProductId(product_id);
+        List<ProductKindDto> productKinds = productKindDao.selectListByProductId(product_id);
 
         // 3. 각 style_num에 대한 url 정보(product_image 테이블), 사이즈별 재고 정보 조회(productStock 테이블)
         Map<String, List<ProductStockDto>> stockInfo = new HashMap<>();

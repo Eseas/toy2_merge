@@ -9,9 +9,35 @@
         FROM p_category
         WHERE category_id = #{category_id}
     </select>
+    <insert id="insertProductCategory" parameterType="ProductCategoryDto">
+        INSERT INTO p_category
+        (
+            category_id,
+            category,
+            <if test="upper_category_id!=null">
+                upper_category_id,
+            </if>
+            using_state,
+            created_id,
+            updated_id
+        )
+        VALUE (
+            #{category_id},
+            #{category},
+            <if test="upper_category_id!=null">
+                #{upper_category_id, jdbcType=INTEGER},
+            </if>
+            #{using_state},
+            #{created_id},
+            #{updated_id}
+        )
+    </insert>
     <select id="selectUpperEquals" parameterType="int" resultType="ProductCategoryDto">
         SELECT category_id, category, upper_category_id, using_state, created_dt, created_id, updated_dt, updated_id
         FROM p_category
         WHERE upper_category_id = #{upper_category_id}
     </select>
+    <delete id="deleteAll">
+        DELETE from p_category
+    </delete>
 </mapper>

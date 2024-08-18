@@ -3,6 +3,7 @@ package com.fastcampus.toy2.Service.Product;
 import com.fastcampus.toy2.domain.Product.ProductDto;
 import com.fastcampus.toy2.domain.Product.ProductKindDto;
 import com.fastcampus.toy2.domain.Product.ProductStockDto;
+import com.fastcampus.toy2.service.Product.ProductService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

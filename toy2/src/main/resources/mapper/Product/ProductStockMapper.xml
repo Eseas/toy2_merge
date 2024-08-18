@@ -29,6 +29,18 @@
     </select>
 
     <!-- insert -->
+    <!--
+    insert into product_stock
+    (style_num, p_size, p_stock, sale_state, created_id, updated_id)
+    value
+    ('7K00000_J08', 270, 10, 'Y', '등록자', '등록자')
+    -->
+    <insert id="insertProductStock" parameterType="ProductStockDto">
+        INSERT INTO product_stock
+        (style_num, p_size, p_stock, sale_state, created_id, updated_id)
+        VALUE
+        (#{style_num}, #{p_size}, #{p_stock}, #{sale_state}, #{created_id}, #{updated_id})
+    </insert>
     <!-- update -->
     <update id="changeStock" parameterType="hashMap">
         UPDATE product_stock
@@ -36,5 +48,7 @@
         WHERE style_num = #{style_num}
     </update>
     <!-- delete -->
-
+    <delete id="deleteAll">
+        DELETE FROM product_stock
+    </delete>
 </mapper>

@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEPA</title>
-    <link rel="stylesheet" href="<c:url value='/resources/static/css/index.css?ver=7' />">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/index.css?ver=1">
 </head>
 <body>
 <div class="container">
@@ -34,21 +34,21 @@
     <div class="product-list">
         <h1 onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=1&page=1&sort=2'">신발</h1>
         <div class="category">
-            <h2 onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=3&page=1&sort=2'">MEN</h2>
+            <h2 onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=2&page=1&sort=2'">MEN</h2>
             <ul>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=5&page=1&sort=2'">트레킹</li>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=6&page=1&sort=2'">하이킹</li>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=7&page=1&sort=2'">워킹</li>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=8&page=1&sort=2'">샌들/슬라이드</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=4&page=1&sort=2'">트레킹</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=5&page=1&sort=2'">하이킹</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=6&page=1&sort=2'">워킹</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=7&page=1&sort=2'">샌들/슬라이드</li>
             </ul>
         </div>
         <div class="category">
-            <h2 onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=4&page=1&sort=2'">WOMEN</h2>
+            <h2 onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=3&page=1&sort=2'">WOMEN</h2>
             <ul>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=9&page=1&sort=2'">트레킹</li>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=10&page=1&sort=2'">하이킹</li>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=11&page=1&sort=2'">워킹</li>
-                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=12&page=1&sort=2'">샌들/슬라이드</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=8&page=1&sort=2'">트레킹</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=9&page=1&sort=2'">하이킹</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=10&page=1&sort=2'">워킹</li>
+                <li onclick="location.href='${pageContext.request.contextPath}/product/list?category_id=11&page=1&sort=2'">샌들/슬라이드</li>
             </ul>
         </div>
     </div>

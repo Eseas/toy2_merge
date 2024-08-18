@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Product Detail</title>
-    <link rel="stylesheet" href="<c:url value='/resources/static/css/productDetail.css?ver=18' />">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/productDetail.css?ver=1">
 </head>
 <body>
 <div>
@@ -25,7 +25,7 @@
 </div>
 <div class="product-container">
     <div class="product-image">
-        <img src="<c:url value='/resources/static/image/${product.main_image_url}.jpeg' />" alt="${product.p_name}">
+        <img src="http://localhost:8080/toy2_war_exploded/image/${product.main_image_url}.jpeg" alt="Product Image">
     </div>
     <div class="product-details">
         <h1>${product.p_name}</h1>
@@ -119,7 +119,7 @@
         const selectedColorCode = document.querySelector('input[name="color_code"]:checked').value;
         console.log("selectedColorCode = " + selectedColorCode);
         // 현재 경로에 color_code를 쿼리스트링으로 추가하여 페이지 이동
-        const url = `${window.location.pathname}/toy2/product/detail?id=${product.product_id}&color_code=`;
+        const url = `${pageContext.request.contextPath}/product/detail?id=${product.product_id}&color_code=`;
         const result = url + selectedColorCode;
         console.log("result = " + result);
         window.location.href = result;

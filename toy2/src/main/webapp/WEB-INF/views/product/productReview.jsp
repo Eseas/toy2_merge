@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Product Review</title>
-    <link rel="stylesheet" href="<c:url value='/resources/static/css/productReview.css?ver=1' />">
+    <link rel="stylesheet" href="<c:url value='/resources/css/productReview.css?ver=1' />">
 </head>
 <body>
 

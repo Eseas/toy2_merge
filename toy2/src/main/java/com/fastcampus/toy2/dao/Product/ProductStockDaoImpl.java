@@ -23,8 +23,18 @@ public class ProductStockDaoImpl implements ProductStockDao {
     }
 
     @Override
-    public List<ProductStockDto> getStockList(String style_num) throws Exception {
+    public List<ProductStockDto> selectByProductId(String style_num) throws Exception {
         System.out.println("ProductStockDaoImpl called()");
         return session.selectList(namespace + "selectByStyleNum", style_num);
+    }
+
+    @Override
+    public int insertProductStock(ProductStockDto productStockDto) throws Exception {
+        return session.insert(namespace + "insertProductStock", productStockDto);
+    }
+
+    @Override
+    public int deleteAll() throws Exception {
+        return session.delete(namespace + "deleteAll");
     }
 }

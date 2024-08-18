@@ -14,6 +14,11 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao {
     private String namespace = "com.fastcampus.toy2.dao.Product.ProductCategoryMapper.";
 
     @Override
+    public int insertProductCategory(ProductCategoryDto productCategoryDto) throws Exception {
+        return session.insert(namespace + "insertProductCategory", productCategoryDto);
+    }
+
+    @Override
     public List<ProductCategoryDto> selectList() throws Exception {
         return List.of();
     }
@@ -26,5 +31,10 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao {
     @Override
     public List<ProductCategoryDto> selectUpperEquals(Integer upper_category_id) throws Exception {
         return session.selectList(namespace + "selectUpperEquals", upper_category_id);
+    }
+
+    @Override
+    public int deleteAll() throws Exception {
+        return session.delete(namespace + "deleteAll");
     }
 }

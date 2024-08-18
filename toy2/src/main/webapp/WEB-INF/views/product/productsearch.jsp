@@ -6,13 +6,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEPA Products</title>
-    <link rel="stylesheet" href="<c:url value='/resources/static/css/productlist.css?ver=20' />">
+    <link rel="stylesheet" href="<c:url value='/resources/css/productsearch.css?ver=1' />">
 </head>
 <body>
 <div class="container">
     <div class="top-right-buttons">
         <a href="${pageContext.request.contextPath}/mypage">마이페이지</a>
-        <button class="search-btn" onclick="openSearch()">검색</button>
         <c:choose>
             <c:when test="${not empty sessionScope.user}">
                 <a href="${pageContext.request.contextPath}/logout">로그아웃</a>
@@ -26,37 +25,7 @@
     <div class="wrapper">
         <div class="home" onclick="location.href='${pageContext.request.contextPath}'">NEPA</div>
     </div>
-    <!-- 검색 창 모달 -->
-    <div id="searchModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeSearch()">&times;</span>
-            
-            <!-- 검색 조건 선택 -->
-            <select class="search-option">
-                <option value="product_id">Product ID</option>
-                <option value="p_name">Product Name</option>
-            </select>
-
-            <!-- 검색 입력 -->
-            <input type="text" class="search-input" placeholder="검색어를 입력하세요">
-            
-            <!-- 검색 버튼 -->
-            <button class="submit-btn" onclick="submitSearch()">검색</button>
-        </div>
-    </div>
-    <h2>${current_category}(${total_count})</h2>
-    <div class="categories">
-        <c:forEach var="entry" items="${select_category}">
-            <a href="${pageContext.request.contextPath}/product/list?category_id=${entry.key}&page=1&sort=2" class="category-link">${entry.value}</a>
-        </c:forEach>
-        <select id="sortCriteria" name="sortCriteria" onchange="updateSort()">
-            <option value="1">이름순</option>
-            <option value="2">인기순</option>
-            <option value="3">신상품순</option>
-            <option value="4">낮은가격순</option>
-            <option value="5">높은가격순</option>
-        </select>
-    </div>
+    <h2>${keyword}(${total_count})</h2>
     <div class="products">
         <c:forEach var="product" items="${products}">
             <div class="product-item" onclick="location.href=`${pageContext.request.contextPath}/product/detail?id=${product.product_id}`;">
@@ -119,26 +88,5 @@
         currentUrl.searchParams.set('sort', sortCriteria);
 
         window.location.href = currentUrl.toString();
-    }
-
-    // 검색
-    function openSearch() {
-        document.getElementById("searchModal").style.display = "block";
-    }
-
-    function closeSearch() {
-        // 모달 닫기
-        document.getElementById("searchModal").style.display = "none";
-
-        // 검색어 초기화
-        document.querySelector(".search-input").value = "";
-    }
-
-    // 모달 외부 클릭 시 모달 닫기
-    window.onclick = function(event) {
-        var modal = document.getElementById("searchModal");
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
     }
 </script>

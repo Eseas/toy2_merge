@@ -4,6 +4,8 @@ package com.fastcampus.toy2.controller.Product;
 import com.fastcampus.toy2.domain.Product.ProductDto;
 import com.fastcampus.toy2.domain.Product.ProductKindDto;
 import com.fastcampus.toy2.domain.Product.ProductStockDto;
+import com.fastcampus.toy2.service.Product.ProductService;
+import com.fastcampus.toy2.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,17 +30,19 @@ public class ProductController {
     
     static int PAGE_SIZE = 12;
 
-    @ExceptionHandler(Exception.class)
-    public String exception(Model model, Exception e) {
-        e.printStackTrace();
-        model.addAttribute("message", e.getMessage());
-        return "error";
-    }
+//    @ExceptionHandler(Exception.class)
+//    public String exception(Model model, Exception e) {
+//        e.printStackTrace();
+//        model.addAttribute("message", e.getMessage());
+//        return "error";
+//    }
 
     // try catch > exception handler > controllerAdvice
 
     @GetMapping("/list")
-    public String list(@RequestParam(defaultValue = "2") Integer category_id, int page, int sort, Model m, HttpServletRequest request) throws Exception {
+    public String list(@RequestParam(defaultValue = "1") Integer category_id,
+                       @RequestParam(defaultValue = "1") int page,
+                       @RequestParam(defaultValue = "2") int sort, Model m, HttpServletRequest request) throws Exception {
         /**
          * 1. 페이지가 있다면, 페이지로, 없다면 1페이지를 현재 페이지로 저장한다.
          * 2. 페이지에 해당하는 판매중인 상품을 가져온다.
@@ -57,16 +61,20 @@ public class ProductController {
 
         int prevPage = page - 1;
         int nextPage = page + 1;
-
-        List<ProductDto> productDtos = productService.findProductCategoryPage(categories, sort, page, PAGE_SIZE);
+        List<ProductDto> productDtos;
+        try {
+            productDtos = productService.findProductCategoryPage(categories, sort, page, PAGE_SIZE);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            String msg = "상품이 없습니다.";
+            return "error?msg=" + msg;
+        }
         String current_category = productService.getcurrentCategory(category_id);
         HashMap<Integer, String> select_category = new HashMap<>();
         if(category_id != 1) {
             select_category = productService.getSelectCategory(category_id);
         }
 
-        // System.out.println("total_count: " + total_count);
-        // System.out.println("maxPage = " + maxPage);
         m.addAttribute("current_category", current_category);
         m.addAttribute("select_category", select_category);
         m.addAttribute("category_id", category_id);
@@ -78,16 +86,13 @@ public class ProductController {
         m.addAttribute("nextPage", nextPage);
         m.addAttribute("maxPage", maxPage);
 
-        return "productlist";
+        return "product/productlist";
     }
 
     @GetMapping("/detail")
     public String detail(@RequestParam(name="id") String product_id,
                          @RequestParam(name="color_code", required=false) String color_code,
                          Model model) throws Exception {
-        /**
-         *
-         */
         ProductDto productDto = productService.getProductById(product_id);
         List<ProductKindDto> productKindDtoList = productService.getProductKindList(product_id);
         String style_num = product_id + "_" + color_code;
@@ -103,7 +108,7 @@ public class ProductController {
         model.addAttribute("selectedColorCode", color_code); // 현재 선택된 색상 코드
         model.addAttribute("productStock", productStockDtoList);
 
-        return "productDetail";
+        return "product/productDetail";
     }
 
     @PostMapping("/add")
