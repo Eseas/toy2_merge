@@ -1,11 +1,11 @@
 # toy2
 
-jdk version - carretto 11
-tomcat version - 9
-RDBMS version - MySQL 9
+jdk version - carretto 11.
+tomcat version - 9.
+RDBMS version - MySQL 9.
 
-ERD 구성 - ERDCloud
-https://www.erdcloud.com
+ERD 구성 - ERDCloud.
+https://www.erdcloud.com.
 
 사용 기술 스택 - Spring framework, my-batis, jsp, java-script
 
