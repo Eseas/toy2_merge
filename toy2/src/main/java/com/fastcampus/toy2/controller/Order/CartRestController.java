@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/cart")
+@RequestMapping("/order")
 public class CartRestController {
 
     @Autowired
@@ -64,7 +64,7 @@ public class CartRestController {
     /*
         장바구니에서 상품을 삭제할 때
     */
-    @PostMapping("/removeItems")
+    @PostMapping("/cart/removeItems")
     @ResponseBody
     public ResponseEntity<String> removeItems(@RequestBody List<Map<String, String>> items, HttpSession session) {
         try {
