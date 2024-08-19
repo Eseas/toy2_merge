@@ -52,13 +52,60 @@ label {
     color: #333;
     margin-bottom: 5px;
     display: inline-block;
+    font-weight: bold; /* 볼드 처리 */
+    text-align: left; /* 왼쪽 정렬 */
+}
+
+/* 이메일 타이틀 스타일 */
+#email-title {
+    display: block; /* 한 줄 차지 */
+    text-align: left; /* 왼쪽 정렬 */
+    font-weight: bold; /* 볼드 처리 */
+    margin-bottom: 5px;
+}
+
+/* 이메일 입력 필드, 도메인 선택, 인증 버튼 스타일 */
+.email-group {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.email-group input[type="email"] {
+    flex-grow: 2; /* 이메일 입력 필드가 더 넓게 차지하도록 함 */
+    min-width: 0; /* flex-grow 설정 시 최소 너비 설정 */
+}
+
+.email-group select {
+    flex-grow: 1; /* 도메인 선택 필드 */
+    min-width: 100px; /* 선택 필드의 최소 너비 설정 */
+}
+
+.email-group button {
+    flex-grow: 0; /* 버튼은 기본 크기를 유지 */
+    white-space: nowrap; /* 버튼 텍스트가 줄 바꿈되지 않도록 설정 */
+    padding: 8px 12px; /* 버튼 크기 조정 */
+}
+
+/* 주소 타이틀 스타일 */
+#address-title {
+    display: block; /* 한 줄 차지 */
+    text-align: left; /* 왼쪽 정렬 */
+    font-weight: bold; /* 볼드 처리 */
+    margin-bottom: 5px;
+}
+
+/* 우편번호와 주소 찾기 버튼 스타일 */
+.address-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* 버튼 스타일 */
 input[type="button"], button {
     padding: 10px 20px;
     color: #fff;
-    background-color: #007bff;
+    background-color: #575757;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -67,7 +114,7 @@ input[type="button"], button {
 }
 
 input[type="button"]:hover, button:hover {
-    background-color: #0056b3;
+    background-color: #424141;
 }
 
 /* 에러 메시지 스타일 */
@@ -104,19 +151,19 @@ div > label {
 
 /* 취소 버튼 스타일 */
 #cancel {
-    background-color: #dc3545;
+    background-color: #afafaf;
 }
-
+/* 취소 버튼 위에 마우스 올렸을 때 스타일 */
 #cancel:hover {
     background-color: #c82333;
 }
 
 /* 가입완료 버튼 스타일 */
 #signup {
-    background-color: #28a745;
+    background-color: #373737;
     margin-left: 10px;
 }
-
+/* 가입완료 버튼 위에 마우스 올렸을 때 스타일 */
 #signup:hover {
     background-color: #218838;
 }

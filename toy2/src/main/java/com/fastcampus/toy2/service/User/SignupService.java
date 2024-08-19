@@ -19,9 +19,9 @@ public class SignupService {
     }
 
     // 2. 이메일 인증 기능
-        // 입력한 이메일 주소로 (랜덤 정수값을) 전송
-        // 인력한 인증번호와 이메일 주소로 보낸 정수값이 같다면, '인증 성공'
-        // 같지 않다면, '인증 실패' + 해당 주소 사용 불가
+    // 입력한 이메일 주소로 (랜덤 정수값을) 전송
+    // 인력한 인증번호와 이메일 주소로 보낸 정수값이 같다면, '인증 성공'
+    // 같지 않다면, '인증 실패' + 해당 주소 사용 불가
 
     // 3. 회원가입정보를 DB에 저장하는 기능
     public boolean memberSignup (MemberDto memberDto) throws Exception {
@@ -31,7 +31,6 @@ public class SignupService {
         return true;
     }
 }
-
 /*
     검증과 회원가입 기능은 분리를 하는게 좋다.
 

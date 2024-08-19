@@ -116,7 +116,7 @@ public class CartController {
         CartItemDto sample3 = new CartItemDto();
         sample3.setStyle_num("7KC7602_K16");
         sample3.setP_size(255);
-        sample3.setCount(3);
+        sample3.setCount(1);
         cartItemDtoList.add(sample3);
     }
 }

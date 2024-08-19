@@ -411,7 +411,7 @@ public class ProductDaoImplTest {
                     .sale_count((long) (Math.random() * 10000))
                     .main_image_url("image" + ((int) (Math.random() * 10) + 1))
                     .p_season("A")
-                    .category_id((int) (Math.random() * 8) + 5)
+                    .category_id((int) (Math.random() * 8) + 4)
                     .created_id("등록자" + i)
                     .updated_id("등록자" + i)
                     .build();
@@ -718,4 +718,9 @@ public class ProductDaoImplTest {
         }
     }
     */
+
+    @Test
+    public void deleteAll() throws Exception {
+        productDao.deleteAll();
+    }
 }

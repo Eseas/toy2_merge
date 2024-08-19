@@ -5,10 +5,10 @@
 <html>
 <head>
     <title>Shopping Cart</title>
-    <link rel="stylesheet" type="text/css" href="/css/cart.css">
-    <link rel="stylesheet" type="text/css" href="/css/modal.css"> <!-- 모달 스타일 추가 -->
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/cart.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/modal.css"> <!-- 모달 스타일 추가 -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="/js/cart.js"></script>
+    <script src="${pageContext.request.contextPath}/js/cart.js"></script>
 </head>
 <body>
 <div class="shopping-bag">

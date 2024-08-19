@@ -1,77 +1,177 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.fastcampus.toy2.dao.MemberMapper">
-    <!-- SQL 조각 정의(우선 다 넣었다) -->
+    <!-- SQL 조각 정의(모든 컬럼 포함) -->
     <sql id="selectFromMember">
-        mbr_id, mbr_state_cd, last_access_date, mbr_grade_cd, name,
+        mbr_id, pw, mbr_status_cd, last_access_date, mbr_grade_cd, name,
         birth, gender, phone_num, email, addr_cd,
         addr_line1, addr_line2, ps_info_collect_use_agree, sms_rcv_agree, dm_rcv_agree,
-        tm_rcv_agree, email_rcv_agree, opt_info_collect_use_agree, life_mbr_agree
+        tm_rcv_agree, email_rcv_agree, opt_info_collect_use_agree, life_mbr_agree,
+        created_dt, created_id, updated_dt, updated_id
     </sql>
 
     <!-- select 해야하는 것:
-     1) 회원정보 전부 조회 - id, 회원상태코드id, 최근 접속일, 등급, 이름, 생년월일, 양력/음력, 성별, 휴대폰번호, 이메일, 우편번호, 기본주소, 상세주소, 선택 동의 사항(7개)
-     2) 회원정보 1개 조회 - id / 이름 / 생년월일 / 휴대폰번호 / 이메일
-     3) 총 회원수 조회 - count
+     1) (사용자) 회원가입 페이지 - id 중복체크, 회원정보수정 페이지-비밀번호 확인 페이지에서 id 보여주기 - id
+     2) (사용자) 회원정보수정 페이지에서 기존 정보 불러오기 - id,이름,성별,휴대폰번호,생년월일,이메일,주소,선택동의(마케팅4개+평생회원1개)
+     3) (관리자) 전체 조회
+     4) (관리자) 여러명 조회 - 조회기준: 회원상태, 순서: 이름순/최근 접속일자순
+     5) (관리자) 1명 조회 - 조회기준: id, 이름, 생년월일
+     6) count
      -->
-    <select id="selectAll" resultType="MemberDto">
-        SELECT <include refid="selectFromMember"/>
-        FROM member
-        ORDER BY created_dt ASC
-    </select>
-
-    <select id="selectOne" parameterType="String" resultType="MemberDto">
-        SELECT <include refid="selectFromMember"/>
+    <select id="selectMemberId" parameterType="String" resultType="String">
+        SELECT mbr_id
         FROM member
         WHERE mbr_id = #{mbr_id}
     </select>
 
+    <select id="selectMemberInfo" parameterType="String" resultType="MemberDto">
+        SELECT mbr_id, pw, name, gender, phone_num, birth, email, addr_cd, addr_line1, addr_line2, sms_rcv_agree, dm_rcv_agree, tm_rcv_agree, email_rcv_agree, life_mbr_agree
+        FROM member
+        WHERE mbr_id = #{mbr_id}
+    </select>
+    <select id="selectAllMembers" parameterType="map" resultType="MemberDto">
+        SELECT <include refid="selectFromMember"/>
+        FROM member
+        <choose>
+            <when test="sortBy == 'last_access_date'">
+                ORDER BY last_access_date DESC <!-- 최근접속일자 내림차순으로 -->
+            </when>
+            <when test="sortBy == 'birth'">
+                ORDER BY birth ASC <!-- 생년월일 오름차순으로 -->
+            </when>
+            <otherwise>
+                ORDER BY mbr_id ASC <!-- 기본 정렬 기준 -->
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectMembers" parameterType="Map" resultType="MemberDto">
+        SELECT <include refid="selectFromMember"/>
+        FROM member
+        <where>
+            <if test="mbr_status_cd != null">
+                AND mbr_status_cd = #{mbr_status_cd}
+            </if>
+        </where>
+        <choose>
+            <when test="sortBy == 'name'">
+                ORDER BY name ASC <!-- 이름 오름차순으로 -->
+            </when>
+            <when test="sortBy == 'last_access_date'">
+                ORDER BY last_access_date DESC <!-- 최근접속일자 내림차순으로 -->
+            </when>
+            <otherwise>
+                ORDER BY mbr_id ASC <!-- 기본 정렬 기준 -->
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectOneMember" parameterType="Map" resultType="MemberDto">
+        SELECT <include refid="selectFromMember"/>
+        FROM member
+        <where> <!-- 조회 기준: id, 이름, 생년월일 -->
+            <if test="mbr_id != null">
+                AND mbr_id = #{mbr_id}
+            </if>
+            <if test="name != null">
+                AND name = #{name}
+            </if>
+            <if test="birth != null">
+                AND birth = #{birth}
+            </if>
+        </where>
+
+    </select>
     <select id="count" resultType="int">
         SELECT count(*) FROM member
     </select>
 
     <!-- insert 해야 하는 것:
-     1) 회원가입시 저장되어야 하는 정보 (고민 = 생성자, 수정자 id가 들어가야 하는가?)
+     1) (사용자)회원가입 - 개인정보 수집 및 이용 동의 (선택), 마케팅정보수신동의(3가지), 아이디, 비밀번호, 이름, 생년월일,
+                        성별, 휴대폰번호, 이메일, 우편주소, 기본주소, 상세주소, 생성자(시스템), 수정자(변경이력없음)
      -->
-    <insert id="insert" parameterType="MemberDto">
+    <insert id="memberSignup" parameterType="MemberDto">
         INSERT INTO member
-        (mbr_id, pw, last_access_date, name, birth, phone_num, email)
-        VALUES (#{mbr_id}, #{pw}, #{last_access_date}, #{name}, #{birth}, #{phone_num}, #{email} )
+        (opt_info_collect_use_agree, sms_rcv_agree, tm_rcv_agree, email_rcv_agree, mbr_id, pw, name, birth, gender, phone_num, email, addr_cd, addr_line1, addr_line2)
+        VALUES (
+        <!-- [발생했던 오류메시지] java.lang.NumberFormatException: For input string: "N"] 오류가 발생.
+        [원인] 비교하는 문장을 따옴표(") 안에 작은따옴표(')를 쓰는 경우 자리수가 1자리 일 경우 숫자로 인식.
+        [해결방법] 작은따음표(') 안에 따옴표(")로 구분하도록 순서를 변경.
+         -->
+        <if test='opt_info_collect_use_agree == "Y"'>now()</if>
+        <if test='opt_info_collect_use_agree != "Y"'>null</if>,
+
+        <if test='sms_rcv_agree == "Y"'>now()</if>
+        <if test='sms_rcv_agree != "Y"'>null</if>,
+
+        <if test='tm_rcv_agree == "Y"'>now()</if>
+        <if test='tm_rcv_agree != "Y"'>null</if>,
+
+        <if test='email_rcv_agree == "Y"'>now()</if>
+        <if test='email_rcv_agree != "Y"'>null</if>,
+        #{mbr_id},
+        #{pw},
+        #{name},
+        #{birth},
+        #{gender},
+        #{phone_num},
+        #{email},
+        #{addr_cd},
+        #{addr_line1},
+        #{addr_line2})
     </insert>
 
+    <!-- update 사용하는 경우
+     1) (사용자)회원정보수정 - 비밀번호, 핸드폰번호, 이메일, 주소, 선택동의사항(7가지)
+        // now()로 쓰면 다 같이 now적용되는 문제점 발생. (if문 적용-선택했을 때에만 now() 적용)
+     2) (관리자)회원정보수정 - 휴대폰번호, 이메일, 주소, 수정자ID
+     3) (관리자)휴면 고객 처리 - 회원상태
+    -->
+    <update id="updateMember" parameterType="MemberDto">
+        UPDATE member
+        SET pw = #{pw}
+        , phone_num = #{phone_num}
+        , email = #{email}
+        , addr_cd = #{addr_cd}
+        , addr_line1 = #{addr_line1}
+        , addr_line2 = #{addr_line2}
+        , ps_info_collect_use_agree = <if test='ps_info_collect_use_agree == "Y"'>now()</if> <if test='ps_info_collect_use_agree != "Y"'>null</if>
+        , sms_rcv_agree = <if test='sms_rcv_agree == "Y"'>now()</if> <if test='sms_rcv_agree != "Y"'>null</if>
+        , dm_rcv_agree = <if test='dm_rcv_agree == "Y"'>now()</if> <if test='dm_rcv_agree != "Y"'>null</if>
+        , tm_rcv_agree = <if test='tm_rcv_agree == "Y"'>now()</if> <if test='tm_rcv_agree != "Y"'>null</if>
+        , email_rcv_agree = <if test='email_rcv_agree == "Y"'>now()</if> <if test='email_rcv_agree != "Y"'>null</if>
+        , opt_info_collect_use_agree = <if test='opt_info_collect_use_agree == "Y"'>now()</if> <if test='opt_info_collect_use_agree != "Y"'>null</if>
+        , life_mbr_agree = <if test='life_mbr_agree == "Y"'>now()</if> <if test='life_mbr_agree != "Y"'>null</if>
+        WHERE mbr_id = #{mbr_id}
+    </update>
+    <update id="updateAdmin" parameterType="MemberDto">
+        UPDATE member
+        SET phone_num = #{phone_num}
+        , email = #{email}
+        , addr_cd = #{addr_cd}
+        , addr_line1 = #{addr_line1}
+        , addr_line2 = #{addr_line2}
+        , updated_id = #{updated_id}
+        WHERE mbr_id = #{mbr_id}
+    </update>
+    <update id="setMemberStatus" parameterType="MemberDto">
+        UPDATE member
+        SET mbr_status_cd = #{mbr_status_cd}
+        WHERE mbr_id = #{mbr_id}
+    </update>
+
     <!-- delete 해야 하는 것
-     1) 전체 삭제
-     2) 부분 삭제: (기준) 회원id & 생년월일
+     (240811) 회원 탈퇴는 회원상태가 '휴면'으로 변경되어 데이터가 저장되기 때문에 데이터 삭제는 없다고 판단.
+     (240815) Dao 테스트에서 사용하기위해 회원 정보 데이터 삭제 기능 추가
      -->
+    <delete id="delete" parameterType="String">
+        DELETE FROM member
+        WHERE mbr_id = #{mbr_id}
+    </delete>
     <delete id="deleteAll">
         DELETE FROM member
     </delete>
-
-    <delete id="delete" parameterType="map">
-        DELETE FROM member WHERE mbr_id = #{mbr_id} and birth = #{birth}
-    </delete>
-
-    <!-- update 사용하는 경우
-     1) 회원정보 수정 가능 내용 - 비밀번호, 핸드폰 번호, 이메일, 주소, 선택동의사항 now()로 쓰면 다 같이 now적용됨X
-    -->
-    <update id="update" parameterType="MemberDto">
-        UPDATE member
-        SET pw = #{pw}
-            , phone_num = #{phoneNum}
-            , email = #{email}
-            , addr_cd = #{addr_cd}
-            , addr_line1 = #{addr_line1}
-            , addr_line2 = #{addr_line2}
-            , ps_info_collect_use_agree = now()
-            , sms_rcv_agree = now()
-            , dm_rcv_agree = now()
-            , tm_rcv_agree = now()
-            , email_rcv_agree = now()
-            , opt_info_collect_use_agree = now()
-            , life_mbr_agree = now()
-        WHERE mbr_id = #{mbr_id}
-    </update>
 
 </mapper>

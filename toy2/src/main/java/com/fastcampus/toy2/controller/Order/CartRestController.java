@@ -68,6 +68,7 @@ public class CartRestController {
     @ResponseBody
     public ResponseEntity<String> removeItems(@RequestBody List<Map<String, String>> items, HttpSession session) {
         try {
+            System.out.println("controller removeItems called()");
             String result = cartService.removeItems(items, session);
             return new ResponseEntity<>(result, HttpStatus.OK);
         } catch (Exception e) {

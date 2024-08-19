@@ -65,9 +65,9 @@ public class SignupController {
             }
             // jsp로 해당 status와 함께 errorMap을 전달 (어떻게? map으로)
             ResponseEntity<Map<String, Object>> responseEntity = new ResponseEntity<>(resultMap, HttpStatus.BAD_REQUEST);
-            System.out.println(responseEntity.getBody());
+            System.out.println("[Controller ErrorMesssage] = "+responseEntity.getBody());
             return responseEntity;
-        // 검증에 성공한 경우
+            // 검증에 성공한 경우
         } else {
             boolean saveDB = signupService.memberSignup(member);
             if (saveDB) {

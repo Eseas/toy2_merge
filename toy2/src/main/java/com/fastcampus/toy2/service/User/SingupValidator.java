@@ -31,6 +31,13 @@ public class SingupValidator implements Validator {
         ex) ValidationUtils.rejectIfEmptyOrWhitespace(errors, "id", "field.required", "입력란에 제대로 입력했는지 확인해주세요");
 
         디폴트 메시지는 가장 마지막.
+
+        (추가 필요) 아이디 중복체크 확인 필요
+            mbr_id 중복 체크 하고 validator로 넘어오거나,
+            validator에서 중복 체크 조건을 추가하거나
+        (추가 필요) 필수 동의 사항 체크 확인기능 추가 필요
+            (문제) jsp에 있는 기능 껐을 때, 필수동의사항에 대한 확인이 없어서 필수동의 없이도 가입이 가능함.......
+
 */
 
         // 1) id - nonNull, 6~16, 공백과 한글 미포함
@@ -84,7 +91,7 @@ public class SingupValidator implements Validator {
             errors.rejectValue("name","field.required", "이름은 필수 입력값입니다.");
         } else {
             // 길이 체크
-            if (name.length() < 50) {
+            if (name.length() > 50) {
                 errors.rejectValue("name", "field.size", "이름은 50자 이내로 입력해야 합니다.");
             }
         }
@@ -122,7 +129,7 @@ public class SingupValidator implements Validator {
                 errors.rejectValue("phone_num","field.required", "휴대폰 번호는 숫자만 입력해주세요.");
             }
             // 길이 체크
-            if(phone_num.length() == 11) {
+            if(phone_num.length() == 13) {
                 errors.rejectValue("phone_num", "field.size", "휴대폰 번호를 11자리를 모두 입력해주세요.");
             }
         }
@@ -133,7 +140,7 @@ public class SingupValidator implements Validator {
             errors.rejectValue("email","field.required", "이메일은 필수 입력값입니다.");
         } else {
             // 길이 체크
-            if (name.length() < 50) {
+            if (email.length() > 50) {
                 errors.rejectValue("email", "field.size", "50자 이내로 입력해야 합니다.");
             }
         }

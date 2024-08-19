@@ -20,7 +20,8 @@
                 <a href="${pageContext.request.contextPath}/login">로그인</a>
             </c:otherwise>
         </c:choose>
-        <a href="${pageContext.request.contextPath}/cart">장바구니</a>
+        <a href="${pageContext.request.contextPath}/signup">회원가입</a>
+        <a href="${pageContext.request.contextPath}/order/cart">장바구니</a>
     </div>
 
     <div class="wrapper">
